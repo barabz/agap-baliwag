@@ -212,7 +212,10 @@ const ActiveAlerts = ({ alerts, teams, onDispatch, onResolve, onCancelDispatch }
                 <div style={{ flex: 1, position: 'relative', zIndex: 1 }}>
                   {/* We use a key based on the alert ID so the map strictly re-centers when switching alerts! */}
                   <MapContainer key={selectedAlert.id} center={[selectedAlert.lat, selectedAlert.lng]} zoom={16} style={{ width: '100%', height: '100%' }} zoomControl={false}>
-                    <TileLayer url="https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png" />
+                    <TileLayer 
+  url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" 
+  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+/>
                     <Marker position={[selectedAlert.lat, selectedAlert.lng]} icon={getAlertIcon} />
                   </MapContainer>
                 </div>
