@@ -94,7 +94,10 @@ const NavigationMap = ({ mission, status, myTeam }) => {
           style={{ width: '100%', height: '100%' }}
           zoomControl={false}
         >
-          <TileLayer url="https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png" />
+          <TileLayer 
+  url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" 
+  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+/>
           {/* Recenters when myPos or targetPos changes */}
           <MapAutoCenter center={[centerLat, centerLng]} />
           

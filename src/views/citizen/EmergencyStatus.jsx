@@ -113,7 +113,10 @@ const EmergencyStatus = ({ onCancel, user, lat, lng, myAlert, myTeam }) => {
           {activeView === 'map' ? (
             <div style={{ width: '100%', height: '220px', borderRadius: '4px', border: '1px solid var(--border-color)', position: 'relative', zIndex: 1 }}>
               <MapContainer center={[lat, lng]} zoom={14} style={{ width: '100%', height: '100%' }} zoomControl={false}>
-                <TileLayer url="https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png" />
+                <TileLayer 
+  url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" 
+  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+/>
                 <Marker position={[lat, lng]} icon={citizenIcon} />
                 {/* Dynamically render the Rescuer Marker if one is assigned! */}
                 {myTeam && <Marker position={[myTeam.lat, myTeam.lng]} icon={rescuerIcon} />}

@@ -108,7 +108,10 @@ const DashboardOverview = ({ alerts, teams, setCurrentView }) => {
           </div>
           <div style={{ flex: 1, background: '#e2e8f0', position: 'relative', zIndex: 1 }}>
             <MapContainer center={mapCenter} zoom={14} style={{ width: '100%', height: '100%' }} zoomControl={false}>
-              <TileLayer url="https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png" />
+              <TileLayer 
+  url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" 
+  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+/>
               {alerts.filter(a => a.status !== 'Resolved').map(alert => (
                 <Marker key={`alert-${alert.id}`} position={[alert.lat, alert.lng]} icon={getAlertIcon}>
                   <Popup><strong>{alert.id}</strong><br/>{alert.type} ({alert.status})</Popup>
