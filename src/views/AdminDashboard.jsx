@@ -32,17 +32,17 @@ const AdminDashboard = ({ alerts = [], teams = [], logs = [] }) => {
       {/* Main Content Area */}
       <div className="dashboard-main">
         {/* Top Navigation */}
-        <header className="dashboard-header">
+        <header className="dashboard-header" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
           <div className="header-title">
-            <h1>General Overview</h1>
-            <p>Real-time barangay emergency status</p>
+            <h1 style={{ fontSize: '28px', fontWeight: 800, marginBottom: '4px' }}>🚨 Emergency Command Center</h1>
+            <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: 0 }}>Real-time barangay emergency response dashboard</p>
           </div>
           <div className="admin-profile">
             <div className="admin-info">
-              <span className="admin-name">Barbz</span>
+              <span className="admin-name" style={{ fontWeight: 700 }}>Barbz</span>
               <span className="admin-role">System Admin</span>
             </div>
-            <div className="admin-avatar">B</div>
+            <div className="admin-avatar" style={{ background: 'linear-gradient(135deg, #0284c7, #059669)' }}>B</div>
           </div>
         </header>
 
@@ -51,35 +51,35 @@ const AdminDashboard = ({ alerts = [], teams = [], logs = [] }) => {
           
           {/* Key Statistics Grid */}
           <div className="stats-grid">
-            <div className="stat-card danger">
-              <div className="stat-icon">⚠️</div>
+            <div className="stat-card danger" style={{ borderLeft: '4px solid var(--danger)' }}>
+              <div className="stat-icon" style={{ background: 'rgba(220, 38, 38, 0.1)', color: 'var(--danger)' }}>⚠️</div>
               <div className="stat-details">
-                <h3>Pending Alerts</h3>
-                <p className="stat-number">{pendingCount}</p>
+                <h3 style={{ color: 'var(--text-muted)', fontSize: '12px', textTransform: 'uppercase', fontWeight: 600 }}>Pending Alerts</h3>
+                <p className="stat-number" style={{ color: 'var(--danger)' }}>{pendingCount}</p>
               </div>
             </div>
 
-            <div className="stat-card warning">
-              <div className="stat-icon">🚑</div>
+            <div className="stat-card warning" style={{ borderLeft: '4px solid var(--warning)' }}>
+              <div className="stat-icon" style={{ background: 'rgba(234, 88, 12, 0.1)', color: 'var(--warning)' }}>🚑</div>
               <div className="stat-details">
-                <h3>Teams Deployed</h3>
-                <p className="stat-number">{dispatchingCount}</p>
+                <h3 style={{ color: 'var(--text-muted)', fontSize: '12px', textTransform: 'uppercase', fontWeight: 600 }}>Teams Deployed</h3>
+                <p className="stat-number" style={{ color: 'var(--warning)' }}>{dispatchingCount}</p>
               </div>
             </div>
 
-            <div className="stat-card success">
-              <div className="stat-icon">✅</div>
+            <div className="stat-card success" style={{ borderLeft: '4px solid var(--success)' }}>
+              <div className="stat-icon" style={{ background: 'rgba(5, 150, 105, 0.1)', color: 'var(--success)' }}>✅</div>
               <div className="stat-details">
-                <h3>Available Rescuers</h3>
-                <p className="stat-number">{availableRescuersCount}</p>
+                <h3 style={{ color: 'var(--text-muted)', fontSize: '12px', textTransform: 'uppercase', fontWeight: 600 }}>Available Rescuers</h3>
+                <p className="stat-number" style={{ color: 'var(--success)' }}>{availableRescuersCount}</p>
               </div>
             </div>
 
-            <div className="stat-card info">
-              <div className="stat-icon">📋</div>
+            <div className="stat-card info" style={{ borderLeft: '4px solid var(--info)' }}>
+              <div className="stat-icon" style={{ background: 'rgba(2, 132, 199, 0.1)', color: 'var(--info)' }}>📋</div>
               <div className="stat-details">
-                <h3>Resolved Today</h3>
-                <p className="stat-number">{resolvedCount}</p>
+                <h3 style={{ color: 'var(--text-muted)', fontSize: '12px', textTransform: 'uppercase', fontWeight: 600 }}>Resolved Today</h3>
+                <p className="stat-number" style={{ color: 'var(--info)' }}>{resolvedCount}</p>
               </div>
             </div>
           </div>
@@ -87,9 +87,9 @@ const AdminDashboard = ({ alerts = [], teams = [], logs = [] }) => {
           {/* System Status / Map Area */}
           <div className="overview-section">
             <div className="overview-card" style={{ padding: 0, overflow: 'hidden' }}>
-              <div className="card-header" style={{ padding: '20px', borderBottom: '1px solid #eee' }}>
-                <h3 style={{ margin: 0 }}>Live Sector Map</h3>
-                <span className="live-indicator" style={{ color: 'red', fontWeight: 'bold', fontSize: '12px' }}>● LIVE</span>
+              <div className="card-header" style={{ padding: '20px', borderBottom: '1px solid var(--border-color)', background: '#f9fafb', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3 style={{ margin: 0, fontWeight: 700, fontSize: '16px' }}>📍 Live Sector Map</h3>
+                <span className="live-indicator" style={{ color: 'var(--danger)', fontWeight: 'bold', fontSize: '12px', animation: 'pulse 2s infinite' }}>● LIVE</span>
               </div>
               
               {/* Real OpenStreetMap Integration */}

@@ -59,10 +59,10 @@ const ActiveAlerts = ({ alerts, teams, onDispatch, onResolve, onCancelDispatch }
       {showDispatchModal && (
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          backgroundColor: 'rgba(15, 23, 42, 0.5)', backdropFilter: 'blur(4px)',
+          backgroundColor: 'rgba(0, 0, 0, 0.4)', backdropFilter: 'blur(6px)',
           zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center'
         }}>
-          <div className="data-card fade-in" style={{ width: '400px', padding: '32px', margin: 0, cursor: 'default' }}>
+          <div className="data-card fade-in" style={{ width: '420px', padding: '32px', margin: 0, cursor: 'default', borderRadius: '16px', boxShadow: '0 20px 50px rgba(0,0,0,0.2)' }}>
             <h3 style={{ margin: '0 0 8px 0', fontSize: '20px', fontWeight: 700 }}>Deploy Patrol Team</h3>
             <p style={{ margin: '0 0 20px 0', color: 'var(--text-muted)', fontSize: '13px' }}>Select an available unit to respond to {selectedAlert?.id}.</p>
             
@@ -114,13 +114,14 @@ const ActiveAlerts = ({ alerts, teams, onDispatch, onResolve, onCancelDispatch }
       <div className="list-panel">
         <div className="list-header">
           <div className="list-header-top">
-            <h2>Alert Queue ({alerts.length})</h2>
+            <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 700 }}>🚨 Active Alert Queue</h2>
+            <span style={{ background: 'var(--color-danger)', color: 'white', padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 700 }}>{alerts.length}</span>
           </div>
-          <div className="search-box">
+          <div className="search-box" style={{ marginTop: '16px' }}>
             <span>🔍</span>
             <input 
               type="text" 
-              placeholder="Search ID, Location or Citizen..." 
+              placeholder="Search ID, location, or caller..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -129,8 +130,9 @@ const ActiveAlerts = ({ alerts, teams, onDispatch, onResolve, onCancelDispatch }
         
         <div className="list-content">
           {filteredAlerts.length === 0 ? (
-            <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '13px' }}>
-              {alerts.length === 0 ? "No active alerts." : "No matching alerts found."}
+            <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--text-muted)' }}>
+              <div style={{ fontSize: '32px', marginBottom: '12px', opacity: 0.5 }}>📡</div>
+              <p style={{ fontSize: '13px', margin: 0 }}>{alerts.length === 0 ? "No active alerts" : "No matching alerts found"}</p>
             </div>
           ) : (
             filteredAlerts.map(alert => (
@@ -138,6 +140,7 @@ const ActiveAlerts = ({ alerts, teams, onDispatch, onResolve, onCancelDispatch }
                 key={alert.id} 
                 className={`data-card ${selectedAlert?.id === alert.id ? 'active-card' : ''}`}
                 onClick={() => setSelectedAlert(alert)}
+                style={{ borderLeft: `4px solid ${alert.status === 'Pending' ? 'var(--color-danger)' : 'var(--color-info)'}` }}
               >
                 <div className="card-top-row">
                   <div className="card-info">
@@ -165,14 +168,14 @@ const ActiveAlerts = ({ alerts, teams, onDispatch, onResolve, onCancelDispatch }
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', height: '100%' }}>
             
             {/* TOP HEADER */}
-            <div className="detail-header" style={{ marginBottom: 0 }}>
+            <div className="detail-header" style={{ marginBottom: 0, borderLeft: `4px solid ${selectedAlert.status === 'Pending' ? 'var(--color-danger)' : 'var(--color-info)'}` }}>
               <div className="detail-header-left">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                  <h1 style={{ color: selectedAlert.status === 'Pending' ? 'var(--color-danger)' : 'var(--text-dark)', margin: 0 }}>
+                  <h1 style={{ color: selectedAlert.status === 'Pending' ? 'var(--color-danger)' : 'var(--text-dark)', margin: 0, fontSize: '28px', fontWeight: 800 }}>
                     {selectedAlert.id}
                   </h1>
-                  <span style={{ background: 'var(--color-dark)', color: 'white', padding: '4px 10px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>
-                    {selectedAlert.type.toUpperCase()}
+                  <span style={{ background: selectedAlert.type === 'Medical' ? 'var(--color-info)' : selectedAlert.type === 'Fire' ? 'var(--color-warning)' : 'var(--color-dark)', color: 'white', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 700 }}>
+                    {selectedAlert.type}
                   </span>
                 </div>
                 <div className="detail-meta">

@@ -41,18 +41,18 @@ const DashboardOverview = ({ alerts, teams, setCurrentView }) => {
     <div className="fade-in" style={{ padding: '24px', height: '100%', overflowY: 'auto', boxSizing: 'border-box', backgroundColor: 'var(--bg-main)' }}>
       
       {/* HEADER SECTION */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '32px' }}>
         <div>
-          <h1 style={{ margin: '0 0 8px 0', fontSize: '28px', color: 'var(--text-dark)', fontWeight: 800, letterSpacing: '-0.5px' }}>
-            AGAP Central Dashboard
+          <h1 style={{ margin: '0 0 8px 0', fontSize: '32px', color: 'var(--text-dark)', fontWeight: 800, letterSpacing: '-0.5px' }}>
+            🎯 Command Center Overview
           </h1>
           <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '14px', fontWeight: 500 }}>
-            Live Command & Control Analytics • {new Date().toLocaleDateString('en-PH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+            Real-time emergency response analytics • {new Date().toLocaleDateString('en-PH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
         </div>
         <div>
-          <button className="btn-dark" style={{ background: 'var(--color-danger)', borderColor: 'var(--color-danger)' }} onClick={() => setCurrentView('alerts')}>
-            🚨 Action Required: {pendingAlerts.length}
+          <button className="btn-dark" style={{ background: 'var(--color-danger)', borderColor: 'var(--color-danger)', padding: '12px 20px' }} onClick={() => setCurrentView('alerts')}>
+            🚨 Pending: {pendingAlerts.length}
           </button>
         </div>
       </div>
@@ -60,32 +60,32 @@ const DashboardOverview = ({ alerts, teams, setCurrentView }) => {
       {/* KPI WIDGETS (KEY PERFORMANCE INDICATORS) */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', marginBottom: '24px' }}>
         
-        <div className="data-card" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '4px solid var(--color-danger)' }}>
-          <div style={{ fontSize: '32px', background: 'var(--status-danger-bg)', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '12px' }}>🚨</div>
+        <div className="data-card" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '4px solid var(--color-danger)', cursor: 'pointer', transition: 'all 0.3s ease' }} onClick={() => setCurrentView('alerts')}>
+          <div style={{ fontSize: '28px', background: 'rgba(220, 38, 38, 0.1)', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '12px' }}>🚨</div>
           <div>
             <h3 style={{ margin: '0 0 4px 0', fontSize: '12px', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Pending Alerts</h3>
             <p style={{ margin: 0, fontSize: '28px', fontWeight: 800, color: 'var(--text-dark)' }}>{pendingAlerts.length}</p>
           </div>
         </div>
 
-        <div className="data-card" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '4px solid var(--color-warning)' }}>
-          <div style={{ fontSize: '32px', background: 'var(--status-warning-bg)', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '12px' }}>🚓</div>
+        <div className="data-card" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '4px solid var(--color-warning)', cursor: 'pointer', transition: 'all 0.3s ease' }} onClick={() => setCurrentView('alerts')}>
+          <div style={{ fontSize: '28px', background: 'rgba(234, 88, 12, 0.1)', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '12px' }}>🚓</div>
           <div>
             <h3 style={{ margin: '0 0 4px 0', fontSize: '12px', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Active Dispatches</h3>
             <p style={{ margin: 0, fontSize: '28px', fontWeight: 800, color: 'var(--text-dark)' }}>{dispatchedAlerts.length}</p>
           </div>
         </div>
 
-        <div className="data-card" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '4px solid var(--color-success)' }}>
-          <div style={{ fontSize: '32px', background: 'var(--status-success-bg)', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '12px' }}>🛡️</div>
+        <div className="data-card" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '4px solid var(--color-success)', cursor: 'pointer', transition: 'all 0.3s ease' }} onClick={() => setCurrentView('teams')}>
+          <div style={{ fontSize: '28px', background: 'rgba(5, 150, 105, 0.1)', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '12px' }}>🛡️</div>
           <div>
             <h3 style={{ margin: '0 0 4px 0', fontSize: '12px', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Available Squads</h3>
             <p style={{ margin: 0, fontSize: '28px', fontWeight: 800, color: 'var(--text-dark)' }}>{availableTeams.length}</p>
           </div>
         </div>
 
-        <div className="data-card" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '4px solid var(--color-info)' }}>
-          <div style={{ fontSize: '32px', background: 'var(--status-info-bg)', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '12px' }}>👥</div>
+        <div className="data-card" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '4px solid var(--color-info)', cursor: 'pointer', transition: 'all 0.3s ease' }} onClick={() => setCurrentView('teams')}>
+          <div style={{ fontSize: '28px', background: 'rgba(2, 132, 199, 0.1)', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '12px' }}>👥</div>
           <div>
             <h3 style={{ margin: '0 0 4px 0', fontSize: '12px', textTransform: 'uppercase', color: 'var(--text-muted)' }}>On-Duty Personnel</h3>
             <p style={{ margin: 0, fontSize: '28px', fontWeight: 800, color: 'var(--text-dark)' }}>{totalPersonnel}</p>

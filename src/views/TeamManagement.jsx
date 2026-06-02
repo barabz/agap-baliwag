@@ -118,10 +118,10 @@ const TeamManagement = ({ teams, onAddTeam, onUpdateTeam, onDeleteTeam }) => {
       {showModal && (
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          backgroundColor: 'rgba(15, 23, 42, 0.5)', backdropFilter: 'blur(4px)',
+          backgroundColor: 'rgba(0, 0, 0, 0.4)', backdropFilter: 'blur(6px)',
           zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center'
         }}>
-          <div className="data-card fade-in" style={{ width: '420px', padding: '32px', margin: 0, cursor: 'default', overflow: 'visible' }}>
+          <div className="data-card fade-in" style={{ width: '440px', padding: '32px', margin: 0, cursor: 'default', overflow: 'visible', borderRadius: '16px', boxShadow: '0 20px 50px rgba(0,0,0,0.2)' }}>
             
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
               <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 700 }}>
@@ -132,19 +132,19 @@ const TeamManagement = ({ teams, onAddTeam, onUpdateTeam, onDeleteTeam }) => {
             
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--text-muted)' }}>TEAM NAME / SHIFT</label>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '8px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Team Name / Shift</label>
                 <input 
                   type="text" required placeholder="e.g., Night Shift Patrol A" 
                   value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  style={{ width: '100%', padding: '10px 12px', borderRadius: '6px', border: '1px solid var(--border)', fontFamily: 'inherit', boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border)', fontFamily: 'inherit', boxSizing: 'border-box', fontSize: '14px' }}
                 />
               </div>
 
-              <div style={{ position: 'relative' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--text-muted)' }}>TEAM LEADER / DRIVER (1)</label>
+            <div style={{ position: 'relative' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '8px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Team Leader / Driver</label>
                 <div 
                   onClick={() => { setShowLeaderDrop(!showLeaderDrop); setShowMemberDrop(false); }}
-                  style={{ width: '100%', padding: '10px 12px', borderRadius: '6px', border: '1px solid var(--border)', background: 'white', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                  style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border)', background: 'white', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'all 0.2s ease' }}
                 >
                   <span style={{ color: formData.leader ? 'var(--text-dark)' : 'var(--text-muted)', fontSize: '14px' }}>
                     {formData.leader ? `⭐ ${formData.leader.name} (${formData.leader.role})` : 'Search personnel...'}
@@ -178,11 +178,11 @@ const TeamManagement = ({ teams, onAddTeam, onUpdateTeam, onDeleteTeam }) => {
                 )}
               </div>
 
-              <div style={{ position: 'relative' }}>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--text-muted)' }}>ASSIGN TANODS / BHWs ({formData.members.length})</label>
+            <div style={{ position: 'relative' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, marginBottom: '8px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Assign Tanods / BHWs ({formData.members.length})</label>
                 <div 
                   onClick={() => { setShowMemberDrop(!showMemberDrop); setShowLeaderDrop(false); }}
-                  style={{ width: '100%', minHeight: '42px', padding: '6px 12px', borderRadius: '6px', border: '1px solid var(--border)', background: 'white', cursor: 'pointer', display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center' }}
+                  style={{ width: '100%', minHeight: '48px', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--border)', background: 'white', cursor: 'pointer', display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', transition: 'all 0.2s ease' }}
                 >
                   {formData.members.length === 0 && <span style={{ color: 'var(--text-muted)', fontSize: '14px', padding: '4px 0' }}>Search personnel...</span>}
                   
@@ -250,14 +250,14 @@ const TeamManagement = ({ teams, onAddTeam, onUpdateTeam, onDeleteTeam }) => {
       <div className="list-panel" style={{ width: '100%', borderRight: 'none' }}>
         <div className="list-header">
           <div className="list-header-top">
-            <h2>Patrol & Response Teams</h2>
-            <button className="btn-dark" onClick={openCreateModal}>+ Assign Team</button>
+            <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 700 }}>🚓 Patrol & Response Teams</h2>
+            <button className="btn-dark" onClick={openCreateModal} style={{ padding: '10px 16px', fontSize: '13px' }}>+ Assign Team</button>
           </div>
         </div>
         
-        <div className="list-content" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '16px', alignContent: 'start' }}>
+        <div className="list-content" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px', alignContent: 'start', padding: '16px' }}>
           {teams.map(team => (
-            <div key={team.id} className="data-card" style={{ position: 'relative' }} onClick={() => openEditModal(team)}>
+            <div key={team.id} className="data-card" style={{ position: 'relative', cursor: 'pointer', transition: 'all 0.3s ease' }} onClick={() => openEditModal(team)} onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
               <div style={{ position: 'absolute', top: '16px', right: '16px', fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600 }}>✏️ Edit</div>
               <div className="card-top-row">
                 <div className="card-info" style={{ paddingRight: '40px' }}>

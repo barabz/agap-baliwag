@@ -10,11 +10,13 @@ function RescuerApp({ alerts, setAlerts, teams, setTeams, user, onLogout }) {
   const [currentTab, setCurrentTab] = useState('mission');
   const [missionStatus, setMissionStatus] = useState('En Route');
   const [toastMessage, setToastMessage] = useState('');
+
   // --- DYNAMIC TEAM DETECTION (derive from logged-in user) ---
   // Prefer matching by leaderData.id or personnelData entries; fallback to name match
   const myTeam = user
     ? teams.find(t => (t.leaderData && t.leaderData.id === user.id) || (t.personnelData && t.personnelData.some(p => p.id === user.id)) || t.leader === user.name)
     : teams.find(t => t.id === 1);
+
   const activeAlertRecord = alerts.find(a => a.id === myTeam?.assignedAlert);
 
   const activeMission = activeAlertRecord ? {
@@ -70,6 +72,7 @@ function RescuerApp({ alerts, setAlerts, teams, setTeams, user, onLogout }) {
       async (position) => {
         const liveLat = position.coords.latitude;
         const liveLng = position.coords.longitude;
+
         const distanceKm = calculateDistanceKm(liveLat, liveLng, activeMission.lat, activeMission.lng);
         const teamUpdate = { lat: liveLat, lng: liveLng };
 
@@ -104,17 +107,16 @@ function RescuerApp({ alerts, setAlerts, teams, setTeams, user, onLogout }) {
   const rescuerInfo = { name: user?.name || teamMembers.find(m => m.isMe)?.name || 'Rescuer', role: myTeam?.leader || 'Team Leader', team: myTeam?.name || 'Alpha Squad' };
 
   // --- ACTIONS ---
-  
   // NEW: When rescuer changes status, update the global map!
   const handleStatusChange = (newStatus) => {
     setMissionStatus(newStatus);
-
+    
     // Normalize arrival event and update UI + toast
     if ((newStatus === 'Arrived' || newStatus === 'On Scene') && activeAlertRecord && myTeam?.id) {
       setTeams(teams.map(t => 
-        t.id === myTeam.id ? { ...t, lat: activeAlertRecord.lat, lng: activeAlertRecord.lng, location: 'On Scene', status: 'On Scene' } : t
+         t.id === myTeam.id ? { ...t, lat: activeAlertRecord.lat, lng: activeAlertRecord.lng, location: 'On Scene', status: 'On Scene' } : t
       ));
-      setToastMessage('You have arrived at the scene — provide aid.');
+      setToastMessage('You have arrived at the scene – provide aid.');
     }
   };
 
@@ -139,13 +141,13 @@ function RescuerApp({ alerts, setAlerts, teams, setTeams, user, onLogout }) {
   // Developer helper: simulate the rescuer moving toward the mission (for QA)
   const simulateApproach = async () => {
     if (!myTeam?.id || !activeMission) return;
-
+    
     // start from current team position (fallback to base)
     const startLat = myTeam.lat || 15.1413;
     const startLng = myTeam.lng || 120.5888;
+    
     const steps = 8;
     let step = 0;
-
     const latStep = (activeMission.lat - startLat) / steps;
     const lngStep = (activeMission.lng - startLng) / steps;
 
@@ -155,7 +157,7 @@ function RescuerApp({ alerts, setAlerts, teams, setTeams, user, onLogout }) {
       const newLng = startLng + lngStep * step;
 
       await supabase.from('teams').update({ lat: newLat, lng: newLng, status: step >= steps ? 'On Scene' : 'Deployed' }).eq('id', myTeam.id);
-
+      
       // also nudge the alert in case client logic depends on DB values
       if (activeAlertRecord?.id) {
         await supabase.from('alerts').update({ lat: activeMission.lat, lng: activeMission.lng }).eq('id', activeAlertRecord.id);
@@ -173,13 +175,8 @@ function RescuerApp({ alerts, setAlerts, teams, setTeams, user, onLogout }) {
   const renderTab = () => {
     switch(currentTab) {
       case 'mission': return <MissionOverview mission={activeMission} setCurrentTab={setCurrentTab} />;
-      
-      // NEW: Pass `myTeam` so the map knows where the rescuer actually is
       case 'map': return <NavigationMap mission={activeMission} status={missionStatus} myTeam={myTeam} />;
-      
-      // NEW: Pass our custom `handleStatusChange` wrapper
       case 'status': return <MissionStatus mission={activeMission} status={missionStatus} setStatus={handleStatusChange} onComplete={handleCompleteMission} />;
-      
       case 'team': return <TeamDirectory teamMembers={teamMembers} />;
       default: return <MissionOverview mission={activeMission} setCurrentTab={setCurrentTab} />;
     }
@@ -196,35 +193,52 @@ function RescuerApp({ alerts, setAlerts, teams, setTeams, user, onLogout }) {
           </div>
         </div>
       )}
+      
       <header className="rescuer-header">
         <div className="header-brand">
-          <div style={{ width: 8, height: 8, background: '#09090b', borderRadius: '50%' }}></div>
+          <div style={{ width: 8, height: 8, background: 'white', borderRadius: '50%' }}></div>
           <div>
-            <h1>Rescuer Field App</h1>
+            <h1>🚨 Rescuer Field App</h1>
             <p className="subtitle">{rescuerInfo.team} • {rescuerInfo.role}</p>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-          <div className="status-indicator" style={{ borderColor: activeMission ? '#fecaca' : '#a7f3d0', background: activeMission ? 'var(--status-danger-bg)' : 'var(--status-success-bg)', color: activeMission ? 'var(--status-danger)' : 'var(--status-success)' }}>
+        
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <div className="status-indicator" style={{ borderColor: activeMission ? 'rgba(220, 38, 38, 0.3)' : 'rgba(5, 150, 105, 0.3)', background: activeMission ? 'rgba(220, 38, 38, 0.15)' : 'rgba(5, 150, 105, 0.15)', color: activeMission ? 'var(--status-danger)' : 'var(--status-success)', padding: '8px 14px' }}>
             <span className="pulse-dot" style={{ background: activeMission ? 'var(--status-danger)' : 'var(--status-success)' }}></span> 
             {activeMission ? 'Dispatched' : 'Available'}
           </div>
-          {onLogout && <button className="btn-outline btn-sm" onClick={onLogout} style={{ padding: '6px 12px' }}>Exit</button>}
-          {process.env.NODE_ENV !== 'production' && <button className="btn-ghost btn-sm" onClick={simulateApproach} style={{ padding: '6px 12px' }}>Simulate Approach</button>}
+          {onLogout && <button className="btn-outline btn-sm" onClick={onLogout} style={{ padding: '8px 14px', fontSize: '12px' }}>Exit</button>}
+          {process.env.NODE_ENV !== 'production' && <button className="btn-outline btn-sm" onClick={simulateApproach} style={{ padding: '8px 14px', fontSize: '12px' }}>Simulate</button>}
         </div>
       </header>
 
       <main className="rescuer-content">{renderTab()}</main>
 
+      {/* NEW ICON NAVIGATION BAR */}
       <nav className="rescuer-nav">
-        <button className={`nav-btn ${currentTab === 'mission' ? 'active' : ''}`} onClick={() => setCurrentTab('mission')}><span className="nav-label">Mission</span></button>
+        <button className={`nav-btn ${currentTab === 'mission' ? 'active' : ''}`} onClick={() => setCurrentTab('mission')}>
+          <span style={{ fontSize: '18px', opacity: currentTab === 'mission' ? 1 : 0.6 }}>📋</span>
+          <span className="nav-label">Mission</span>
+        </button>
+        
         {activeMission && (
           <>
-            <button className={`nav-btn ${currentTab === 'map' ? 'active' : ''}`} onClick={() => setCurrentTab('map')}><span className="nav-label">GPS Nav</span></button>
-            <button className={`nav-btn ${currentTab === 'status' ? 'active' : ''}`} onClick={() => setCurrentTab('status')}><span className="nav-label">Status</span></button>
+            <button className={`nav-btn ${currentTab === 'map' ? 'active' : ''}`} onClick={() => setCurrentTab('map')}>
+              <span style={{ fontSize: '18px', opacity: currentTab === 'map' ? 1 : 0.6 }}>🧭</span>
+              <span className="nav-label">GPS Nav</span>
+            </button>
+            <button className={`nav-btn ${currentTab === 'status' ? 'active' : ''}`} onClick={() => setCurrentTab('status')}>
+              <span style={{ fontSize: '18px', opacity: currentTab === 'status' ? 1 : 0.6 }}>📡</span>
+              <span className="nav-label">Status</span>
+            </button>
           </>
         )}
-        <button className={`nav-btn ${currentTab === 'team' ? 'active' : ''}`} onClick={() => setCurrentTab('team')}><span className="nav-label">Team</span></button>
+        
+        <button className={`nav-btn ${currentTab === 'team' ? 'active' : ''}`} onClick={() => setCurrentTab('team')}>
+          <span style={{ fontSize: '18px', opacity: currentTab === 'team' ? 1 : 0.6 }}>👥</span>
+          <span className="nav-label">Team</span>
+        </button>
       </nav>
     </div>
   );

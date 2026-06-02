@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient'; // Connecting to your new file!
+import LandingPage from './views/LandingPage'; // Import your beautiful new landing surface!
 import Login from './views/Login';
 import AdminApp from './AdminApp';
 import RescuerApp from './RescuerApp';
@@ -8,6 +9,7 @@ import CitizenApp from './CitizenApp';
 function App() {
   const [userRole, setUserRole] = useState(null);
   const [user, setUser] = useState(null);
+  const [showLanding, setShowLanding] = useState(true); // New state to control public gateway layer
 
   // --- SESSION PERSISTENCE ---
   useEffect(() => {
@@ -18,6 +20,7 @@ function App() {
         if (session?.role) {
           setUserRole(session.role);
           setUser(session.user || null);
+          setShowLanding(false); // If a valid session exists, skip public landing page
         }
       } catch (err) {
         console.error('Unable to restore session:', err);
@@ -32,23 +35,20 @@ function App() {
 
   // --- INITIAL DATA FETCH & REAL-TIME SUBSCRIPTIONS ---
   useEffect(() => {
-    // 1. Fetch initial data on load
     const fetchInitialData = async () => {
       const { data: alertsData } = await supabase.from('alerts').select('*').order('time', { ascending: false });
       const { data: teamsData } = await supabase.from('teams').select('*').order('id', { ascending: true });
       const { data: logsData } = await supabase.from('logs').select('*').order('date', { ascending: false });
-      
+             
       if (alertsData) setAlerts(alertsData);
       if (teamsData) setTeams(teamsData);
       if (logsData) setLogs(logsData);
     };
-
     fetchInitialData();
 
-    // 2. Subscribe to REAL-TIME changes! 
+    // Subscribe to REAL-TIME changes!
     const channel = supabase.channel('agap-global-channel')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'alerts' }, payload => {
-        // If an alert is added, updated, or deleted, refetch the alerts
         supabase.from('alerts').select('*').order('time', { ascending: false }).then(({data}) => setAlerts(data || []));
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'teams' }, payload => {
@@ -59,7 +59,6 @@ function App() {
       })
       .subscribe();
 
-    // Cleanup subscription when app closes
     return () => {
       supabase.removeChannel(channel);
     };
@@ -81,24 +80,21 @@ function App() {
       allergies: citizenData.allergies,
       conditions: citizenData.conditions
     };
-    
-    // Write to Cloud Database instead of local state!
+         
     const { error } = await supabase.from('alerts').insert([newAlert]);
     if (error) console.error("Error triggering emergency:", error);
   };
 
   const cancelEmergency = async (alertId) => {
-    // 1. Delete from alerts table
     await supabase.from('alerts').delete().eq('id', alertId);
-    
-    // 2. Free up the team if they were assigned
+         
     const assignedTeam = teams.find(t => t.assignedAlert === alertId);
     if (assignedTeam) {
       await supabase.from('teams').update({ 
-        status: 'Available', 
-        location: 'Barangay Hall', 
-        assignedAlert: null 
-      }).eq('id', assignedTeam.id);
+         status: 'Available', 
+         location: 'Barangay Hall', 
+         assignedAlert: null 
+       }).eq('id', assignedTeam.id);
     }
   };
 
@@ -113,19 +109,24 @@ function App() {
     localStorage.removeItem('agapSession');
     setUserRole(null);
     setUser(null);
+    setShowLanding(true); // Return back to public presentation on sign-out
   };
 
-  // --- ROUTING ---
-  if (!userRole) return <Login onSelectRole={handleSessionLogin} />;
+  // --- ROUTING ENGINE ---
+  if (!userRole && showLanding) {
+    return <LandingPage onEnterPortal={() => setShowLanding(false)} />;
+  }
+  
+  if (!userRole && !showLanding) {
+    return <Login onSelectRole={handleSessionLogin} />;
+  }
 
   if (userRole === 'admin') {
     return <AdminApp alerts={alerts} setAlerts={setAlerts} teams={teams} setTeams={setTeams} logs={logs} setLogs={setLogs} user={user} onLogout={handleSessionLogout} />;
   }
-  
   if (userRole === 'rescuer') {
     return <RescuerApp alerts={alerts} setAlerts={setAlerts} teams={teams} setTeams={setTeams} user={user} onLogout={handleSessionLogout} />;
   }
-  
   if (userRole === 'citizen') {
     return <CitizenApp alerts={alerts} teams={teams} user={user} onTriggerEmergency={triggerEmergency} onCancelEmergency={cancelEmergency} onLogout={handleSessionLogout} />;
   }

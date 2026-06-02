@@ -78,20 +78,20 @@ const IncidentLogs = ({ logs }) => {
     <div className="fade-in" style={{ padding: '32px', height: '100%', display: 'flex', flexDirection: 'column', overflowY: 'auto', background: 'var(--bg-main)' }}>
       
       {/* Page Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
         <div>
-          <h2 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: 700 }}>System Archives & Logs</h2>
-          <p style={{ margin: 0, color: 'var(--text-muted)' }}>Historical record of all cleared incidents and system events.</p>
+          <h2 style={{ margin: '0 0 8px 0', fontSize: '28px', fontWeight: 800 }}>📋 Incident Archives & Logs</h2>
+          <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '14px' }}>Complete historical record of all resolved incidents and system events</p>
         </div>
         <div style={{ display: 'flex', gap: '12px' }}>
-          <button className="btn-outline">📥 Export to CSV</button>
-          <button className="btn-dark">🖨️ Print Report</button>
+          <button className="btn-outline" style={{ padding: '10px 16px', fontSize: '13px' }}>📥 Export CSV</button>
+          <button className="btn-dark" style={{ padding: '10px 16px', fontSize: '13px' }}>🖨️ Print Report</button>
         </div>
       </div>
 
       {/* Advanced Filtering Card */}
-      <div className="data-card" style={{ padding: '16px 20px', marginBottom: '24px', display: 'flex', gap: '16px', alignItems: 'center', background: '#ffffff', flexWrap: 'wrap' }}>
-        <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-muted)' }}>Filter Records:</span>
+      <div className="data-card" style={{ padding: '20px', marginBottom: '24px', display: 'flex', gap: '16px', alignItems: 'center', background: '#ffffff', flexWrap: 'wrap', borderRadius: '12px' }}>
+        <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>🔍 Filter Records:</span>
         
         {/* NEW: Date Range Inputs */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -99,14 +99,14 @@ const IncidentLogs = ({ logs }) => {
             type="date" 
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border)', color: 'var(--text-dark)', fontFamily: 'inherit' }} 
+            style={{ padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--border)', color: 'var(--text-dark)', fontFamily: 'inherit', background: '#f9fafb' }} 
           />
-          <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>to</span>
+          <span style={{ color: 'var(--text-muted)', fontSize: '12px', fontWeight: 600 }}>→</span>
           <input 
             type="date" 
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border)', color: 'var(--text-dark)', fontFamily: 'inherit' }} 
+            style={{ padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--border)', color: 'var(--text-dark)', fontFamily: 'inherit', background: '#f9fafb' }} 
           />
         </div>
         
@@ -114,7 +114,7 @@ const IncidentLogs = ({ logs }) => {
         <select 
           value={typeFilter} 
           onChange={(e) => setTypeFilter(e.target.value)}
-          style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border)', color: 'var(--text-dark)', fontFamily: 'inherit', background: 'white' }}
+          style={{ padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--border)', color: 'var(--text-dark)', fontFamily: 'inherit', background: '#f9fafb', cursor: 'pointer', fontWeight: 500 }}
         >
           <option>All Emergency Types</option>
           <option>Medical</option>
@@ -128,7 +128,7 @@ const IncidentLogs = ({ logs }) => {
         <select 
           value={resolutionFilter} 
           onChange={(e) => setResolutionFilter(e.target.value)}
-          style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border)', color: 'var(--text-dark)', fontFamily: 'inherit', background: 'white' }}
+          style={{ padding: '10px 12px', borderRadius: '8px', border: '1px solid var(--border)', color: 'var(--text-dark)', fontFamily: 'inherit', background: '#f9fafb', cursor: 'pointer', fontWeight: 500 }}
         >
           <option>All Resolutions</option>
           <option>Resolved</option>
@@ -149,9 +149,9 @@ const IncidentLogs = ({ logs }) => {
       </div>
 
       {/* Full-Width Log Archive Table Card */}
-      <div className="table-container" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-        <div style={{ overflowX: 'auto' }}>
-          <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', background: 'white', border: '1px solid var(--border)', borderRadius: '8px' }}>
+      <div className="table-container" style={{ display: 'flex', flexDirection: 'column', flex: 1, background: 'white', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)', overflow: 'hidden' }}>
+        <div style={{ overflowX: 'auto', flex: 1 }}>
+          <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', background: 'white' }}>
             <thead>
               {/* NEW: Clickable Headers for Sorting */}
               <tr style={{ background: '#f8fafc', borderBottom: '1px solid var(--border)', textAlign: 'left' }}>
@@ -208,7 +208,7 @@ const IncidentLogs = ({ logs }) => {
         </div>
         
         {/* Pagination Footer */}
-        <div style={{ padding: '16px 24px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc' }}>
+        <div style={{ padding: '16px 24px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f9fafb' }}>
           <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: 500 }}>Showing {processedLogs.length} entries</span>
           <div style={{ display: 'flex', gap: '8px' }}>
             <button className="btn-outline" style={{ padding: '6px 12px', opacity: 0.5, cursor: 'not-allowed' }}>Previous</button>

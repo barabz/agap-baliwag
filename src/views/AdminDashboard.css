@@ -1,18 +1,20 @@
 /* src/views/AdminDashboard.css */
 
 :root {
-  --bg-color: #f4f7f6;
-  --sidebar-bg: #1e293b;
-  --sidebar-hover: #334155;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
+  --bg-color: #f0f4f8;
+  --sidebar-bg: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  --sidebar-hover: rgba(255,255,255, 0.1);
+  --text-main: #1a1f36;
+  --text-muted: #6b7280;
   --card-bg: #ffffff;
-  --border-color: #e2e8f0;
+  --border-color: #dce4ec;
   
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --success: #10b981;
-  --info: #3b82f6;
+  --danger: #dc2626;
+  --warning: #ea580c;
+  --success: #059669;
+  --info: #0284c7;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
 }
 
 body {
@@ -31,10 +33,11 @@ body {
 /* Sidebar Styling */
 .dashboard-sidebar {
   width: 260px;
-  background-color: var(--sidebar-bg);
+  background: var(--sidebar-bg);
   color: white;
   display: flex;
   flex-direction: column;
+  box-shadow: 2px 0 10px rgba(0,0,0, 0.1);
 }
 
 .brand {
@@ -64,12 +67,13 @@ body {
 }
 
 .nav-link {
-  color: #cbd5e1;
+  color: #9ca3af;
   text-decoration: none;
   padding: 12px 16px;
   border-radius: 8px;
   font-weight: 500;
   transition: all 0.2s ease;
+  margin: 0 8px;
 }
 
 .nav-link:hover {
@@ -80,6 +84,7 @@ body {
 .nav-link.active {
   background-color: var(--danger);
   color: white;
+  font-weight: 600;
 }
 
 /* Main Area Styling */
@@ -167,9 +172,15 @@ body {
   display: flex;
   align-items: center;
   gap: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+  box-shadow: var(--shadow-md);
   border: 1px solid var(--border-color);
   border-left: 5px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .stat-card.danger { border-left-color: var(--danger); }
@@ -208,7 +219,7 @@ body {
   background-color: var(--card-bg);
   border-radius: 12px;
   border: 1px solid var(--border-color);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
 }
 
@@ -258,4 +269,14 @@ body {
   0% { opacity: 1; }
   50% { opacity: 0.5; }
   100% { opacity: 1; }
+}
+
+/* Enhanced animations */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
